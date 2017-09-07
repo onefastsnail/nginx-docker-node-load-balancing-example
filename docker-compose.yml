@@ -1,0 +1,33 @@
+node1:
+    build: ./node/
+    container_name: "node1"
+    ports:
+        - 8081:8080
+    environment:
+        MESSAGE: "This is Node 1"
+    volumes_from:
+        - app
+
+node2:
+    build: ./node/
+    container_name: "node2"
+    ports:
+        - 8082:8080
+    environment:
+        MESSAGE: "This is Node 2"
+    volumes_from:
+        - app
+
+nginx:
+    build: ./nginx/
+    ports:
+        - 80:80
+    links:
+       - node1
+       - node2
+
+app:
+    image: alpine:latest
+    volumes:
+        - ./node/app:/srv/www/app
+    command: "true"
